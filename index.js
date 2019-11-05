@@ -26,7 +26,11 @@ const puppeteer = require('puppeteer')
 
   await page.waitFor(3000)
 
-  const reserveButtons = (await page.$x('//button[contains(., "reserve")]'));
+  // Rows that don't have weekends
+  // and have a button with text "reserve"
+  const xpath = '//div[@class="row"][not(contains(., "Saturday")) and not(contains(., "Sunday"))]//button[contains(., "reserve")]'
+
+  const reserveButtons = (await page.$x(xpath));
 
   console.log('Reserving...')
   while (reserveButtons.length) {
