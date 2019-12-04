@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer')
 
   await page.setViewport({
     width: 1200,
-    height: 768,
+    height: 980,
     deviceScaleFactor: 1,
   })
 
@@ -46,7 +46,10 @@ const puppeteer = require('puppeteer')
 
   console.log('Logging out...')
   const [logOutButton] = (await page.$x('//a[contains(., "Logout")]'));
-  await logOutButton.click()
+
+  if (logOutButton) {
+    await logOutButton.click()
+  }
 
   console.log('Successfully logged out!')
   await page.waitFor(3000)
