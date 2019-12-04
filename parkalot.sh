@@ -9,14 +9,15 @@ password       Your Parkalot password
 HELP_USAGE
 }
 
-if [ $# -eq 0 ]; then
-  echo "No arguments provided"
+username=$1
+password=$2
+
+if [ $# -eq 0 ] || [ -z "$username" ] || [ -z "$password" ]; then
+  echo "Required arguments are missing..."
+  echo ""
   usage
   exit 1
 fi
-
-username=$1
-password=$2
 
 npm i && \
 node . "$username" "$password"
