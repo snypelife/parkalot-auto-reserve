@@ -3,6 +3,11 @@
 const [,,username, password] = process.argv
 const puppeteer = require('puppeteer')
 
+if (!username || !password) {
+  console.log('Required arguments are missing...')
+  process.exit(1)
+}
+
 ;(async () => {
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
