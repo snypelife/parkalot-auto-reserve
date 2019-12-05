@@ -1,6 +1,6 @@
 {
   "name": "parkalot-auto-reserve",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple script to auto reserve parking spots",
   "main": "cli.js",
   "dependencies": {
