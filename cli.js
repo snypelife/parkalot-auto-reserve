@@ -1,6 +1,6 @@
 'use strict'
 
-const [username, password] = process.argv.slice(2)
+const [,,username, password] = process.argv
 const puppeteer = require('puppeteer')
 
 ;(async () => {
@@ -36,13 +36,13 @@ const puppeteer = require('puppeteer')
   while (reserveButtons.length) {
     let reserveButton = reserveButtons.pop()
     await reserveButton.click()
+    await page.waitFor(500)
     console.log(`${reserveButtons.length} days left to reserve...`)
   }
 
   console.log('Reserving complete!')
 
   await page.waitFor(5000)
-
 
   console.log('Logging out...')
   const [logOutButton] = (await page.$x('//a[contains(., "Logout")]'));

@@ -1,14 +1,17 @@
 {
-  "name": "parking",
-  "version": "1.0.0",
+  "name": "parkalot-auto-reserve",
+  "version": "0.1.4",
   "description": "Simple script to auto reserve parking spots",
-  "main": "index.js",
+  "main": "cli.js",
   "dependencies": {
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "parkalot-reserve": "cli.js"
   },
   "author": "Brett Rogerson <brettmrogerson@gmail.com>",
   "license": "ISC"
