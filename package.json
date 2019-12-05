@@ -4,7 +4,8 @@
   "description": "Simple script to auto reserve parking spots",
   "main": "cli.js",
   "dependencies": {
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.0.0",
+    "read": "^1.0.7"
   },
   "devDependencies": {},
   "scripts": {
