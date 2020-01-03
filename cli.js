@@ -2,7 +2,6 @@
 
 'use strict'
 
-const [,,username, password] = process.argv
 const fs = require('fs').promises
 const { promisify } = require('util')
 const read = promisify(require('read'))
@@ -60,23 +59,43 @@ async function configure() {
 
     await page.waitFor(3000)
 
-    // Rows that don't have weekends
-    // and have a button with text "reserve"
-    const xpath = '//div[@class="row"][not(contains(., "Saturday")) and not(contains(., "Sunday"))]//button[contains(., "reserve")]'
+    const rows = await page.$$('.row')
 
-    const reserveButtons = (await page.$x(xpath));
-
+    let reserveClicked = false
     console.log('Reserving...')
-    while (reserveButtons.length) {
-      let reserveButton = reserveButtons.pop()
-      await reserveButton.click()
-      await page.waitFor(500)
-      console.log(`${reserveButtons.length} days left to reserve...`)
+    for (const row of rows) {
+      // Find the title by class name.
+      const titleElement = await row.$('.r-t')
+      if (!titleElement) {
+        continue
+      }
+
+      // The day of week is the first <span> in the title element.
+      const dayOfWeek = await titleElement.$eval('span', node => node.innerText)
+      if (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday') {
+        continue
+      }
+
+      const buttons = await row.$$('button')
+      for (const button of buttons) {
+        // Find the reserve button.
+        const buttonText = await button.evaluate(node => node.innerText)
+        if (!buttonText.toLowerCase().includes('reserve')) {
+          continue
+        }
+        
+        reserveClicked = true
+        await button.click()
+        await page.waitFor(500)
+      }
     }
 
     console.log('Reserving complete!')
 
-    await page.waitFor(5000)
+    // If a reserve button was clicked, give it some time to catch up.
+    if (reserveClicked) {
+      await page.waitFor(5000)
+    }
 
     console.log('Logging out...')
     const [logOutButton] = (await page.$x('//a[contains(., "Logout")]'));
@@ -86,7 +105,9 @@ async function configure() {
     }
 
     console.log('Successfully logged out!')
-    await page.waitFor(3000)
+    if (reserveClicked) {
+      await page.waitFor(3000)
+    }
 
     await browser.close()
   } catch (e) {
